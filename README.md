@@ -1,2 +1,56 @@
 # LNSLevelView
+
 A SwiftUI quality level view (vertical bar)
+
+## Installation
+
+Add the LNSLevelView swift package to your project:
+
+  `https://github.com/alldritt/LNSLevelView.git`
+
+## Usage
+
+LNSLevelView is a view you can combine with other SwiftUI views to add a value qiality indicator to your application:
+
+
+```
+import SwiftUI
+import LNSLevelView
+
+struct ContentView: View {
+    var impedanceGradient: Gradient {
+        Gradient(stops: [.init(color: Color(uiColor: .green), location: 0),
+                         .init(color: Color(uiColor: .green), location: 0.5),
+                         .init(color: Color(uiColor: .orange), location: 0.7),
+                         .init(color: Color(uiColor: .red), location: 1)])
+    }
+
+    var body: some View {
+        VStack {
+            LevelView(value: $level,
+                      maxValue: 1.0,
+                      backgroundColor: impedanceGradient.opacity(0.2),
+                      foregroundColor: impedanceGradient)
+                .frame(width: 20, height: 100)
+                .padding()
+            Slider(value: $level)
+                .frame(width: 200)
+                .padding()
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+}
+
+
+fileprivate extension Gradient {
+    
+    func opacity(_ opacity: CGFloat) -> Gradient {
+        //  Create a version of this Gradient with an opacity applied to each stop's color.
+        return Gradient(stops: self.stops.map({ stop in
+                .init(color: stop.color.opacity(opacity), location: stop.location)
+        }))
+    }
+
+}
+
+```
