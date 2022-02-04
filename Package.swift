@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "LNSLevelView",
     platforms: [
-        .macOS(.v10_15), .iOS(.v13), .tvOS(.v13), .watchOS(.v7)
+        .macOS(.v10_15), .iOS(.v14), .tvOS(.v14), .watchOS(.v7)
     ],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
@@ -23,6 +23,6 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "LNSLevelView",
-            dependencies: []),
+            dependencies: [])
     ]
 )
