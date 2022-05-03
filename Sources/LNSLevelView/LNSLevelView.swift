@@ -67,6 +67,24 @@ public struct LNSLevelView: View {
         //  is that location increases with each stop.
         let percentage = self.percentage
 
+        #if true
+        let i = foregroundColor.stops.lastIndex(where: { stop in
+            percentage >= stop.location
+        }) ?? (percentage == 0 ? foregroundColor.stops.startIndex : foregroundColor.stops.endIndex - 1)
+
+        let fromColor = foregroundColor.stops[i].color
+        if i == foregroundColor.stops.endIndex - 1 {
+            return fromColor
+        }
+        else {
+            let toColor = foregroundColor.stops[i + 1].color
+            let baseValue = foregroundColor.stops[i].location
+            let delta = foregroundColor.stops[i + 1].location - baseValue
+            let v = (percentage - baseValue) / delta
+            
+            return Color(CGColor.interpolate(from: fromColor.cgColor!, to: toColor.cgColor!, with: v))
+        }
+        #else
         for i in 1..<foregroundColor.stops.count {
             if percentage >= foregroundColor.stops[i - 1].location &&
                 percentage <= foregroundColor.stops[i].location {
@@ -82,6 +100,7 @@ public struct LNSLevelView: View {
         }
         
         return foregroundColor.stops[0].color
+        #endif
     }
     
     public var body: some View {
