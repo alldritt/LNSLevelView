@@ -16,6 +16,8 @@ LNSLevelView is a view you can combine with other SwiftUI views to add a value q
 ```
 import SwiftUI
 import LNSLevelView
+import LNSSwiftUIExtras
+
 
 struct ContentView: View {
     @State var level: CGFloat: 20 // 0..100
@@ -43,16 +45,3 @@ struct ContentView: View {
     }
 }
 
-
-fileprivate extension Gradient {
-    
-    func opacity(_ opacity: CGFloat) -> Gradient {
-        //  Create a version of this Gradient with an opacity applied to each stop's color.
-        return Gradient(stops: self.stops.map({ stop in
-                .init(color: stop.color.opacity(opacity), location: stop.location)
-        }))
-    }
-
-}
-
-```
