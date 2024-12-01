@@ -6,31 +6,7 @@
 //
 
 import SwiftUI
-
-
-fileprivate extension CGColor {
-
-    var rgbComponents: (r: CGFloat, g: CGFloat, b: CGFloat, a: CGFloat) {
-        let components = self.components!
-
-        switch components.count == 2 {
-        case true : return (r: components[0], g: components[0], b: components[0], a: components[1])
-        case false: return (r: components[0], g: components[1], b: components[2], a: components[3])
-        }
-    }
-
-    static func interpolate(from fromColor: CGColor, to toColor: CGColor, with progress: CGFloat) -> CGColor {
-        let fromComponents = fromColor.rgbComponents
-        let toComponents = toColor.rgbComponents
-
-        let r = (1 - progress) * fromComponents.r + progress * toComponents.r
-        let g = (1 - progress) * fromComponents.g + progress * toComponents.g
-        let b = (1 - progress) * fromComponents.b + progress * toComponents.b
-        let a = (1 - progress) * fromComponents.a + progress * toComponents.a
-
-        return CGColor(red: r, green: g, blue: b, alpha: a)
-    }
-}
+import LNSSwiftUIExtras
 
 
 public struct LNSLevelView: View {
@@ -67,13 +43,12 @@ public struct LNSLevelView: View {
         //  is that location increases with each stop.
         let percentage = self.percentage
 
-        #if true
         let i = foregroundColor.stops.lastIndex(where: { stop in
             percentage >= stop.location
         }) ?? (percentage == 0 ? foregroundColor.stops.startIndex : foregroundColor.stops.endIndex - 1)
 
         let fromColor = foregroundColor.stops[i].color
-        if i == foregroundColor.stops.endIndex - 1 {
+        if i == foregroundColor.stops.endIndex - 1 || fromColor == foregroundColor.stops[i + 1].color {
             return fromColor
         }
         else {
@@ -82,25 +57,8 @@ public struct LNSLevelView: View {
             let delta = foregroundColor.stops[i + 1].location - baseValue
             let v = (percentage - baseValue) / delta
             
-            return Color(CGColor.interpolate(from: fromColor.cgColor!, to: toColor.cgColor!, with: v))
+            return fromColor.interpolate(to: toColor, with: v)
         }
-        #else
-        for i in 1..<foregroundColor.stops.count {
-            if percentage >= foregroundColor.stops[i - 1].location &&
-                percentage <= foregroundColor.stops[i].location {
-                let fromColor = foregroundColor.stops[i - 1].color.cgColor
-                let toColor = foregroundColor.stops[i].color.cgColor
-                let baseValue = foregroundColor.stops[i - 1].location
-
-                let delta = foregroundColor.stops[i].location - foregroundColor.stops[i - 1].location
-                let v = (percentage - baseValue) / delta
-                
-                return Color(CGColor.interpolate(from: fromColor!, to: toColor!, with: v))
-            }
-        }
-        
-        return foregroundColor.stops[0].color
-        #endif
     }
     
     public var body: some View {
