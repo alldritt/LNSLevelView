@@ -15,7 +15,7 @@ let package = Package(
             targets: ["LNSLevelView"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/alldritt/LNSLevelView.git", .branch("main"))
+        .package(url: "git@github.com:alldritt/LNSSwiftUIExtras.git", .branch("main"))
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
